@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANH AIRLINES - Fly Beyond Excellence</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Montserrat:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script>
+tailwind.config={theme:{extend:{colors:{navy:'#081C3A','navy-light':'#0F2D5E','navy-dark':'#050F1F',gold:'#D4AF37','gold-light':'#E8CC6E','gold-dark':'#B8941F'},fontFamily:{display:['Playfair Display','serif'],body:['Montserrat','sans-serif']}}}}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Montserrat',sans-serif;background:#050F1F;color:#fff;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#081C3A}::-webkit-scrollbar-thumb{background:#D4AF37;border-radius:3px}
+.view{display:none;min-height:100vh}.view.active{display:block}
+#loading-screen{position:fixed;inset:0;z-index:9999;background:#050F1F;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
+#loading-screen.hide{opacity:0;visibility:hidden}
+.logo-3d{width:120px;height:120px;perspective:600px;animation:logoFloat 3s ease-in-out infinite}
+.logo-3d-inner{width:100%;height:100%;transform-style:preserve-3d;animation:logoSpin 3s linear infinite}
+@keyframes logoSpin{0%{transform:rotateY(0deg)}100%{transform:rotateY(360deg)}}
+@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.gold-shimmer{background:linear-gradient(90deg,#B8941F 0%,#E8CC6E 25%,#D4AF37 50%,#E8CC6E 75%,#B8941F 100%);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 2s linear infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.loading-bar{width:200px;height:2px;background:rgba(212,175,55,.2);border-radius:1px;overflow:hidden;margin-top:30px}
+.loading-bar-fill{height:100%;background:linear-gradient(90deg,#B8941F,#E8CC6E);animation:loadFill 2.5s ease-in-out forwards}
+@keyframes loadFill{0%{width:0}100%{width:100%}}
+.hero-bg{position:relative;min-height:100vh;background:linear-gradient(135deg,#050F1F 0%,#081C3A 40%,#0F2D5E 100%);overflow:hidden}
+.hero-bg::before{content:'';position:absolute;inset:0;background:url('https://picsum.photos/seed/cloudflight/1920/1080.jpg') center/cover no-repeat;opacity:.15;filter:blur(1px)}
+.hero-particles{position:absolute;inset:0;pointer-events:none}
+.gold-line{width:60px;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,transparent)}
+.fly-plane{position:absolute;font-size:2rem;color:rgba(212,175,55,.6);animation:flyAcross 12s linear infinite;opacity:0}
+.fly-plane:nth-child(2){animation-delay:4s;top:30%}
+.fly-plane:nth-child(3){animation-delay:8s;top:60%}
+@keyframes flyAcross{0%{left:-5%;opacity:0;transform:translateY(0) rotate(-5deg)}10%{opacity:.6}90%{opacity:.6}100%{left:105%;opacity:0;transform:translateY(-80px) rotate(-5deg)}}
+.glass{background:rgba(15,45,94,.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(212,175,55,.15);border-radius:16px}
+.glass-card{background:rgba(8,28,58,.6);backdrop-filter:blur(16px);border:1px solid rgba(212,175,55,.1);border-radius:12px;transition:all .3s}
+.glass-card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,175,55,.1)}
+.btn-gold{background:linear-gradient(135deg,#B8941F,#D4AF37,#E8CC6E);color:#081C3A;font-weight:700;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;font-size:.95rem;letter-spacing:1px;transition:all .3s;position:relative;overflow:hidden;font-family:'Montserrat',sans-serif}
+.btn-gold::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s}
+.btn-gold:hover::before{left:100%}.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(212,175,55,.4)}
+.btn-outline{background:transparent;color:#D4AF37;font-weight:600;padding:12px 32px;border-radius:8px;border:1.5px solid #D4AF37;cursor:pointer;font-size:.9rem;letter-spacing:1px;transition:all .3s;font-family:'Montserrat',sans-serif}
+.btn-outline:hover{background:rgba(212,175,55,.1);transform:translateY(-1px)}
+.btn-danger{background:linear-gradient(135deg,#b91c1c,#dc2626,#ef4444);color:#fff;font-weight:600;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:.78rem;transition:all .3s;font-family:'Montserrat',sans-serif}
+.btn-danger:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(239,68,68,.3)}
+.btn-success-sm{background:linear-gradient(135deg,#15803d,#22c55e,#4ade80);color:#fff;font-weight:600;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:.78rem;transition:all .3s;font-family:'Montserrat',sans-serif}
+.btn-success-sm:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(34,197,94,.3)}
+.input-field{background:rgba(8,28,58,.8);border:1px solid rgba(212,175,55,.2);border-radius:10px;padding:12px 16px;color:#fff;font-family:'Montserrat',sans-serif;font-size:.9rem;width:100%;transition:all .3s;outline:none}
+.input-field:focus{border-color:#D4AF37;box-shadow:0 0 0 3px rgba(212,175,55,.1)}
+.input-field::placeholder{color:rgba(255,255,255,.35)}
+select.input-field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23D4AF37' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+select.input-field option{background:#081C3A;color:#fff}
+.step-item{display:flex;align-items:center;gap:12px;padding:16px;border-radius:10px;transition:all .3s}
+.step-item.completed-approved{background:rgba(212,175,55,.08);border-left:3px solid #D4AF37}
+.step-item.completed-awaiting{background:rgba(251,191,36,.06);border-left:3px solid #fbbf24;animation:reviewPulse 2.5s ease-in-out infinite}
+.step-item.completed-rejected{background:rgba(239,68,68,.06);border-left:3px solid #ef4444}
+.step-item.current{background:rgba(212,175,55,.05);border-left:3px solid #E8CC6E;animation:stepPulse 2s ease-in-out infinite}
+.step-item.pending{opacity:.4;border-left:3px solid rgba(255,255,255,.08)}
+@keyframes stepPulse{0%,100%{background:rgba(212,175,55,.05)}50%{background:rgba(212,175,55,.12)}}
+@keyframes reviewPulse{0%,100%{background:rgba(251,191,36,.04)}50%{background:rgba(251,191,36,.1)}}
+.step-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.step-circle.completed-approved{background:linear-gradient(135deg,#B8941F,#D4AF37);color:#081C3A}
+.step-circle.completed-awaiting{background:transparent;border:2px solid #fbbf24;color:#fbbf24;animation:circlePulse 2.5s ease-in-out infinite}
+.step-circle.completed-rejected{background:transparent;border:2px solid #ef4444;color:#ef4444}
+.step-circle.current{background:transparent;border:2px solid #D4AF37;color:#D4AF37;animation:circlePulse 2s ease-in-out infinite}
+.step-circle.pending{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.25)}
+@keyframes circlePulse{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.3)}50%{box-shadow:0 0 0 6px rgba(212,175,55,0)}}
+.quiz-option{background:rgba(8,28,58,.6);border:1.5px solid rgba(212,175,55,.15);border-radius:10px;padding:14px 18px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:12px}
+.quiz-option:hover{border-color:rgba(212,175,55,.4);background:rgba(15,45,94,.5)}
+.quiz-option.selected{border-color:#D4AF37;background:rgba(212,175,55,.1)}
+.option-letter{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;flex-shrink:0;transition:all .25s}
+.quiz-option.selected .option-letter{background:#D4AF37;color:#081C3A;border-color:#D4AF37}
+.letter-frame{position:relative;border:2.5px solid #D4AF37;border-radius:6px;padding:48px 44px;max-width:700px;margin:0 auto;background:linear-gradient(160deg,#081C3A 0%,#0a2240 30%,#0d2a50 60%,#081C3A 100%);color:#f0e6d0;box-shadow:0 0 60px rgba(212,175,55,.12),inset 0 0 80px rgba(0,0,0,.3)}
+.letter-frame::before{content:'';position:absolute;inset:7px;border:1px solid rgba(212,175,55,.35);border-radius:3px;pointer-events:none}
+.letter-frame::after{content:'';position:absolute;inset:12px;border:0.5px solid rgba(212,175,55,.12);border-radius:2px;pointer-events:none}
+.letter-stamp{position:absolute;top:20px;right:20px;width:62px;height:62px;border:2px dashed rgba(212,175,55,.4);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.55rem;color:#D4AF37;text-align:center;line-height:1.2}
+.tuananh-seal{position:relative;width:120px;height:120px;margin:0 auto;display:flex;align-items:center;justify-content:center}
+.tuananh-seal-inner{width:110px;height:110px;border-radius:50%;border:2.5px solid #D4AF37;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(212,175,55,.06);position:relative}
+.tuananh-seal-inner::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(212,175,55,.3)}
+.tuananh-seal-star{position:absolute;top:-6px;left:50%;transform:translateX(-50%);color:#D4AF37;font-size:12px}
+.fail-frame{position:relative;border:1.5px solid rgba(192,192,192,.4);border-radius:4px;padding:48px 40px;max-width:700px;margin:0 auto;background:linear-gradient(145deg,#f8f9fa,#eef0f2);color:#1a2a3a}
+.fail-frame::before{content:'';position:absolute;inset:5px;border:1px solid rgba(192,192,192,.2);border-radius:2px;pointer-events:none}
+.toast{position:fixed;top:24px;right:24px;z-index:10000;padding:14px 24px;border-radius:10px;font-size:.9rem;font-weight:500;transform:translateX(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);max-width:400px}
+.toast.show{transform:translateX(0)}
+.toast-success{background:rgba(34,197,94,.95);color:#fff;backdrop-filter:blur(8px)}
+.toast-error{background:rgba(239,68,68,.95);color:#fff;backdrop-filter:blur(8px)}
+.toast-info{background:rgba(212,175,55,.95);color:#081C3A;backdrop-filter:blur(8px)}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s}
+nav.scrolled{background:rgba(5,15,31,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,175,55,.1)}
+.fade-up{animation:fadeUp .6s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.stagger-1{animation-delay:.1s;opacity:0}.stagger-2{animation-delay:.2s;opacity:0}.stagger-3{animation-delay:.3s;opacity:0}.stagger-4{animation-delay:.4s;opacity:0}
+.timer-ring{width:64px;height:64px;border-radius:50%;border:3px solid rgba(212,175,55,.2);position:relative;display:flex;align-items:center;justify-content:center}
+.timer-ring svg{position:absolute;inset:-3px;transform:rotate(-90deg)}
+.pw-wrapper{position:relative}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(212,175,55,.5);cursor:pointer;font-size:.85rem;transition:color .2s}
+.pw-toggle:hover{color:#D4AF37}
+.admin-tab{padding:8px 18px;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.admin-tab.active{background:rgba(212,175,55,.15);color:#D4AF37;border-color:rgba(212,175,55,.3)}
+.admin-tab:not(.active){color:rgba(255,255,255,.4)}
+.admin-tab:not(.active):hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.03)}
+.review-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:20px;font-size:.65rem;font-weight:600;letter-spacing:.5px}
+.review-awaiting{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
+.review-approved{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.review-rejected{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.25)}
+@media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%;padding:40px}nav,.no-print{display:none!important}.letter-frame{border-width:2.5px!important;box-shadow:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.letter-frame,.letter-frame *{color:#f0e6d0!important;background-color:#081C3A!important;border-color:#D4AF37!important}}
+@media(max-width:768px){.letter-frame,.fail-frame{padding:28px 18px;margin:0 10px}.letter-stamp{width:48px;height:48px;top:10px;right:10px;font-size:.45rem}.tuananh-seal{width:100px;height:100px}.tuananh-seal-inner{width:90px;height:90px}}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div id="loading-screen">
+  <div class="logo-3d"><div class="logo-3d-inner">
+    <svg viewBox="0 0 120 120" fill="none"><defs><linearGradient id="goldG" x1="0" y1="0" x2="120" y2="120"><stop offset="0%" stop-color="#B8941F"/><stop offset="50%" stop-color="#E8CC6E"/><stop offset="100%" stop-color="#D4AF37"/></linearGradient></defs>
+    <path d="M60 15 L80 45 L95 40 L75 55 L90 85 L60 65 L30 85 L45 55 L25 40 L40 45 Z" fill="url(#goldG)" stroke="#B8941F" stroke-width="1"/>
+    <text x="60" y="52" text-anchor="middle" fill="#081C3A" font-family="Playfair Display" font-size="18" font-weight="800">A</text>
+    <path d="M38 78 Q42 88 60 90 Q78 88 82 78" stroke="url(#goldG)" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div></div>
+  <p class="gold-shimmer font-display text-xl mt-6 tracking-widest">ANH AIRLINES</p>
+  <p class="text-xs text-white/30 mt-2 tracking-[4px]">FLY BEYOND EXCELLENCE</p>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
+
+<nav id="main-nav" class="py-4 px-6 md:px-12">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
+      <svg viewBox="0 0 40 40" width="36" height="36" fill="none"><path d="M20 5 L28 17 L33 15 L26 22 L32 34 L20 26 L8 34 L14 22 L7 15 L12 17 Z" fill="#D4AF37"/><text x="20" y="20" text-anchor="middle" fill="#081C3A" font-family="Playfair Display" font-size="9" font-weight="800">A</text></svg>
+      <span class="font-display font-bold text-sm tracking-[3px] text-gold">ANH AIRLINES</span>
+    </div>
+    <div class="hidden md:flex items-center gap-8">
+      <a onclick="showView('home')" class="text-sm text-white/70 hover:text-gold cursor-pointer transition-colors tracking-wide">Trang chủ</a>
+      <a onclick="showView('register')" class="text-sm text-white/70 hover:text-gold cursor-pointer transition-colors tracking-wide">Ứng tuyển</a>
+      <a onclick="showView('login')" class="text-sm text-white/70 hover:text-gold cursor-pointer transition-colors tracking-wide">Đăng nhập</a>
+      <a onclick="showView('admin-login')" class="text-sm text-white/70 hover:text-gold cursor-pointer transition-colors tracking-wide">Quản trị</a>
+    </div>
+    <button onclick="toggleMobileMenu()" class="md:hidden text-gold text-xl"><i class="fas fa-bars"></i></button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-white/10 pt-4 flex flex-col gap-4">
+    <a onclick="showView('home');toggleMobileMenu()" class="text-sm text-white/70 hover:text-gold cursor-pointer">Trang chủ</a>
+    <a onclick="showView('register');toggleMobileMenu()" class="text-sm text-white/70 hover:text-gold cursor-pointer">Ứng tuyển</a>
+    <a onclick="showView('login');toggleMobileMenu()" class="text-sm text-white/70 hover:text-gold cursor-pointer">Đăng nhập</a>
+    <a onclick="showView('admin-login');toggleMobileMenu()" class="text-sm text-white/70 hover:text-gold cursor-pointer">Quản trị</a>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="view-home" class="view active">
+  <section class="hero-bg flex items-center justify-center relative">
+    <canvas id="particle-canvas" class="hero-particles"></canvas>
+    <div class="fly-plane" style="top:20%"><i class="fas fa-plane"></i></div>
+    <div class="fly-plane"><i class="fas fa-plane"></i></div>
+    <div class="fly-plane"><i class="fas fa-plane"></i></div>
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      <div class="gold-line mx-auto mb-8 fade-up"></div>
+      <p class="text-gold/80 text-xs md:text-sm tracking-[6px] uppercase mb-6 fade-up stagger-1">Recruitment Portal 2026</p>
+      <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-900 leading-tight mb-6 fade-up stagger-2">JOIN THE <span class="gold-shimmer">ELITE</span><br>CABIN CREW TEAM</h1>
+      <p class="text-white/60 text-base md:text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed fade-up stagger-3">Hành trình vươn tới sự xuất sắc bắt đầu từ đây. Anh Airlines tìm kiếm những gương mặt tiềm năng cho đội ngũ tiếp viên hàng không đẳng cấp quốc tế.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center fade-up stagger-4">
+        <button onclick="showView('register')" class="btn-gold text-sm tracking-wider">APPLY NOW</button>
+        <button onclick="document.getElementById('about-section').scrollIntoView({behavior:'smooth'})" class="btn-outline text-sm tracking-wider">TÌM HIỂU THÊM</button>
+      </div>
+      <div class="mt-16 flex justify-center gap-12 md:gap-20 text-center fade-up stagger-4">
+        <div><p class="font-display text-2xl md:text-3xl font-bold text-gold">6</p><p class="text-white/40 text-xs mt-1 tracking-wider">VÒNG TUYỂN</p></div>
+        <div><p class="font-display text-2xl md:text-3xl font-bold text-gold">1000+</p><p class="text-white/40 text-xs mt-1 tracking-wider">CÂU HỎI</p></div>
+        <div><p class="font-display text-2xl md:text-3xl font-bold text-gold">AI</p><p class="text-white/40 text-xs mt-1 tracking-wider">PHỎNG VẤN</p></div>
+      </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"><i class="fas fa-chevron-down text-gold/40 text-sm"></i></div>
+  </section>
+  <section id="about-section" class="py-24 px-6 bg-gradient-to-b from-navy-dark to-navy">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16"><p class="text-gold/70 text-xs tracking-[5px] uppercase mb-4">Quy trình tuyển dụng</p><h2 class="font-display text-3xl md:text-4xl font-bold">Hành trình <span class="text-gold">6 vòng</span> đánh giá</h2></div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card p-6"><div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4"><span class="font-display text-gold font-bold text-lg">01</span></div><h3 class="font-display text-lg font-bold mb-2">Sàng lọc hồ sơ</h3><p class="text-white/50 text-sm leading-relaxed">Đánh giá toàn bộ hồ sơ ứng viên dựa trên tiêu chuẩn ngoại hình, học vấn và kinh nghiệm.</p></div>
+        <div class="glass-card p-6"><div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4"><span class="font-display text-gold font-bold text-lg">02</span></div><h3 class="font-display text-lg font-bold mb-2">Kiểm tra năng lực</h3><p class="text-white/50 text-sm leading-relaxed">Bài test trắc nghiệm ngẫu nhiên từ ngân hàng 1000+ câu hỏi đánh giá tư duy logic.</p></div>
+        <div class="glass-card p-6"><div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4"><span class="font-display text-gold font-bold text-lg">03</span></div><h3 class="font-display text-lg font-bold mb-2">Tiếng Anh hàng không</h3><p class="text-white/50 text-sm leading-relaxed">Kiểm tra năng lực tiếng Anh chuyên ngành hàng không và giao tiếp chuyên nghiệp.</p></div>
+        <div class="glass-card p-6"><div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4"><span class="font-display text-gold font-bold text-lg">04</span></div><h3 class="font-display text-lg font-bold mb-2">Xử lý tình huống</h3><p class="text-white/50 text-sm leading-relaxed">Đánh giá kỹ năng giải quyết vấn đề trong các tình huống thực tế trên chuyến bay.</p></div>
+        <div class="glass-card p-6"><div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4"><span class="font-display text-gold font-bold text-lg">05</span></div><h3 class="font-display text-lg font-bold mb-2">Phỏng vấn Video AI</h3><p class="text-white/50 text-sm leading-relaxed">Phỏng vấn thông minh với AI phân tích biểu cảm, ngữ điệu và nội dung trả lời.</p></div>
+        <div class="glass-card p-6"><div class="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4"><span class="font-display text-gold font-bold text-lg">06</span></div><h3 class="font-display text-lg font-bold mb-2">Đánh giá cuối</h3><p class="text-white/50 text-sm leading-relaxed">Tổng hợp điểm số toàn bộ các vòng, xếp hạng và đưa ra quyết định tuyển dụng.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="py-20 px-6 bg-navy relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image:radial-gradient(circle at 2px 2px,rgba(212,175,55,.5) 1px,transparent 0);background-size:40px 40px"></div>
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Sẵn sàng bay cùng <span class="text-gold">Anh Airlines</span>?</h2>
+      <p class="text-white/50 mb-8">Đăng ký ngay để bắt đầu hành trình trở thành tiếp viên hàng không đẳng cấp quốc tế.</p>
+      <button onclick="showView('register')" class="btn-gold text-sm tracking-wider">ĐĂNG KÝ NGAY</button>
+    </div>
+  </section>
+  <footer class="py-8 px-6 bg-navy-dark border-t border-white/5"><div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4"><p class="text-white/30 text-xs tracking-wider">2026 ANH AIRLINES. All rights reserved.</p><p class="text-white/20 text-xs">Fly Beyond Excellence</p></div></footer>
+</div>
+
+<!-- REGISTER -->
+<div id="view-register" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-10"><p class="text-gold/60 text-xs tracking-[5px] uppercase mb-3">Application Form</p><h2 class="font-display text-3xl font-bold">Đăng ký ứng tuyển</h2></div>
+      <div class="glass p-8 md:p-10">
+        <form id="register-form" onsubmit="handleRegister(event)">
+          <div class="grid md:grid-cols-2 gap-5">
+            <div class="md:col-span-2"><label class="text-xs text-white/50 tracking-wider mb-2 block">HỌ VÀ TÊN</label><input type="text" id="reg-name" class="input-field" placeholder="Nguyễn Văn A" required></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">EMAIL</label><input type="email" id="reg-email" class="input-field" placeholder="email@example.com" required></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">SỐ ĐIỆN THOẠI</label><input type="tel" id="reg-phone" class="input-field" placeholder="0123 456 789" required></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">NGÀY SINH</label><input type="date" id="reg-dob" class="input-field" required></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">GIỚI TÍNH</label><select id="reg-gender" class="input-field" required><option value="">Chọn</option><option value="Nam">Nam</option><option value="Nữ">Nữ</option></select></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">CHIỀU CAO (cm)</label><input type="number" id="reg-height" class="input-field" placeholder="170" min="150" max="200" required></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">CÂN NẶNG (kg)</label><input type="number" id="reg-weight" class="input-field" placeholder="60" min="40" max="120" required></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">TRÌNH ĐỘ</label><select id="reg-education" class="input-field" required><option value="">Chọn</option><option value="Cao đẳng">Cao đẳng</option><option value="Đại học">Đại học</option><option value="Thạc sĩ">Thạc sĩ</option></select></div>
+            <div><label class="text-xs text-white/50 tracking-wider mb-2 block">KINH NGHIỆM</label><select id="reg-experience" class="input-field"><option value="Chưa có">Chưa có</option><option value="1-2 năm">1-2 năm</option><option value="3-5 năm">3-5 năm</option><option value="Trên 5 năm">Trên 5 năm</option></select></div>
+            <div class="md:col-span-2"><label class="text-xs text-white/50 tracking-wider mb-2 block">MẬT KHẨU</label><div class="pw-wrapper"><input type="password" id="reg-password" class="input-field" placeholder="6+ ký tự" minlength="6" required><span class="pw-toggle" onclick="togglePw('reg-password',this)"><i class="fas fa-eye"></i></span></div></div>
+          </div>
+          <button type="submit" class="btn-gold w-full mt-8 text-sm tracking-wider">HOÀN TẤT ĐĂNG KÝ</button>
+        </form>
+      </div>
+      <p class="text-center text-white/30 text-xs mt-6">Đã có tài khoản? <a onclick="showView('login')" class="text-gold/70 cursor-pointer hover:text-gold">Đăng nhập</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="view-login" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark flex items-start justify-center">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-10"><p class="text-gold/60 text-xs tracking-[5px] uppercase mb-3">Candidate Login</p><h2 class="font-display text-3xl font-bold">Đăng nhập</h2></div>
+      <div class="glass p-8">
+        <form onsubmit="handleLogin(event)">
+          <div class="mb-5"><label class="text-xs text-white/50 tracking-wider mb-2 block">SBD HOẶC EMAIL</label><input type="text" id="login-id" class="input-field" placeholder="AA2026-000135" required></div>
+          <div class="mb-6"><label class="text-xs text-white/50 tracking-wider mb-2 block">MẬT KHẨU</label><div class="pw-wrapper"><input type="password" id="login-password" class="input-field" placeholder="Mật khẩu" required><span class="pw-toggle" onclick="togglePw('login-password',this)"><i class="fas fa-eye"></i></span></div></div>
+          <button type="submit" class="btn-gold w-full text-sm tracking-wider">ĐĂNG NHẬP</button>
+        </form>
+      </div>
+      <p class="text-center text-white/30 text-xs mt-6">Chưa có tài khoản? <a onclick="showView('register')" class="text-gold/70 cursor-pointer hover:text-gold">Đăng ký</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="view-admin-login" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark flex items-start justify-center">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-10">
+        <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-4"><i class="fas fa-shield-halved text-gold text-xl"></i></div>
+        <p class="text-gold/60 text-xs tracking-[5px] uppercase mb-3">Admin Portal</p><h2 class="font-display text-3xl font-bold">Đăng nhập quản trị</h2>
+      </div>
+      <div class="glass p-8">
+        <form onsubmit="handleAdminLogin(event)">
+          <div class="mb-5"><label class="text-xs text-white/50 tracking-wider mb-2 block">TÀI KHOẢN</label><input type="text" id="admin-user" class="input-field" placeholder="Nhập tài khoản" required autocomplete="off"></div>
+          <div class="mb-6"><label class="text-xs text-white/50 tracking-wider mb-2 block">MẬT KHẨU</label><div class="pw-wrapper"><input type="password" id="admin-pass" class="input-field" placeholder="Nhập mật khẩu" required autocomplete="off"><span class="pw-toggle" onclick="togglePw('admin-pass',this)"><i class="fas fa-eye"></i></span></div></div>
+          <button type="submit" class="btn-gold w-full text-sm tracking-wider">ĐĂNG NHẬP</button>
+        </form>
+        <div class="mt-6 p-3 rounded-lg bg-white/[.02] border border-white/5"><p class="text-white/20 text-[11px] text-center"><i class="fas fa-lock mr-1"></i>Truy cập được ghi log và giám sát</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="view-dashboard" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark">
+    <div class="max-w-5xl mx-auto">
+      <div class="glass p-6 md:p-8 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div><p class="text-gold/60 text-xs tracking-[4px] mb-1">ANH AIRLINES</p><h2 class="font-display text-2xl font-bold" id="dash-name">—</h2><p class="text-gold font-mono text-sm mt-1" id="dash-sbd">—</p></div>
+          <div class="flex items-center gap-6">
+            <div class="text-right"><p class="text-white/40 text-xs">Điểm tổng</p><p class="font-display text-2xl font-bold text-gold" id="dash-score">0/100</p></div>
+            <div class="text-right"><p class="text-white/40 text-xs">Xếp hạng</p><p class="font-display text-2xl font-bold text-white" id="dash-rank">—</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="glass p-6 md:p-8 mb-6"><h3 class="font-display text-lg font-bold mb-6 text-gold/80">Tiến độ tuyển dụng</h3><div class="space-y-3" id="dash-steps"></div></div>
+      <div class="glass p-6 md:p-8" id="dash-action"></div>
+      <div class="mt-6 text-center"><button onclick="handleLogout()" class="text-white/30 text-xs hover:text-white/60 transition-colors cursor-pointer"><i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="view-quiz" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark">
+    <div class="max-w-3xl mx-auto">
+      <div class="glass p-5 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div><p class="text-gold/60 text-xs tracking-[3px]" id="quiz-round-label">VÒNG 2</p><h2 class="font-display text-lg font-bold" id="quiz-round-name">Kiểm tra năng lực</h2></div>
+        <div class="flex items-center gap-4">
+          <div class="text-right"><p class="text-white/40 text-xs">Câu</p><p class="font-bold text-gold"><span id="quiz-current">1</span>/<span id="quiz-total">8</span></p></div>
+          <div class="timer-ring"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="31" stroke="rgba(212,175,55,.15)" stroke-width="3" fill="none"/><circle id="timer-circle" cx="35" cy="35" r="31" stroke="#D4AF37" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="194.78" stroke-dashoffset="0"/></svg><span class="font-bold text-sm text-gold" id="quiz-timer">15:00</span></div>
+        </div>
+      </div>
+      <div class="glass p-6 md:p-8 mb-6" id="quiz-question-area"></div>
+      <div class="flex justify-between">
+        <button onclick="prevQuestion()" class="btn-outline text-sm" id="btn-prev"><i class="fas fa-arrow-left mr-2"></i>Trước</button>
+        <button onclick="nextQuestion()" class="btn-gold text-sm" id="btn-next">Tiếp theo<i class="fas fa-arrow-right ml-2"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERVIEW -->
+<div id="view-interview" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark flex items-center justify-center">
+    <div class="max-w-lg w-full text-center">
+      <div class="glass p-10">
+        <div class="w-20 h-20 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center mx-auto mb-6"><i class="fas fa-video text-gold text-2xl" id="interview-icon"></i></div>
+        <h2 class="font-display text-2xl font-bold mb-2">Phỏng vấn Video AI</h2>
+        <p class="text-white/50 text-sm mb-8" id="interview-status">Đang khởi tạo hệ thống AI...</p>
+        <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mb-6"><div class="h-full bg-gradient-to-r from-gold-dark via-gold to-gold-light rounded-full transition-all duration-1000" id="interview-progress" style="width:0%"></div></div>
+        <p class="text-white/30 text-xs" id="interview-detail">Vui lòng đợi</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THƯ MỜI - Đã bỏ seal AA, chỉ giữ QR -->
+<div id="view-pass" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark flex items-center justify-center">
+    <div class="max-w-3xl w-full print-area">
+      <div class="letter-frame">
+        <div class="letter-stamp">ANH AIRLINES<br>OFFICIAL</div>
+        <div class="text-center mb-8" style="opacity:.2">
+          <svg viewBox="0 0 60 60" width="50" height="50" fill="none" class="mx-auto"><path d="M30 7 L42 22 L48 20 L38 30 L45 42 L30 34 L15 42 L22 30 L12 20 L18 22 Z" fill="#D4AF37"/><text x="30" y="28" text-anchor="middle" fill="#D4AF37" font-family="Playfair Display" font-size="12" font-weight="800">A</text></svg>
+        </div>
+        <div class="text-center mb-8">
+          <p class="text-xs tracking-[6px] uppercase" style="color:rgba(212,175,55,.6)">ANH AIRLINES</p>
+          <div class="gold-line mx-auto mt-3 mb-3"></div>
+          <h2 class="font-display text-xl md:text-2xl font-bold tracking-[4px]" style="color:#D4AF37">OFFICIAL OFFER LETTER</h2>
+        </div>
+        <div class="mb-6">
+          <p class="text-sm" style="color:rgba(240,230,208,.6)">Kính gửi:</p>
+          <p class="font-display text-lg font-bold" style="color:#f0e6d0" id="pass-name">—</p>
+        </div>
+        <div class="space-y-3 text-sm leading-relaxed mb-8" style="color:rgba(240,230,208,.85)">
+          <p>Chúng tôi vui mừng thông báo rằng bạn đã chính thức vượt qua quy trình tuyển dụng và được tuyển chọn vào vị trí</p>
+          <p class="font-display text-xl font-bold text-center py-2" style="color:#D4AF37">CABIN CREW</p>
+          <p>tại <strong style="color:#D4AF37">ANH AIRLINES</strong>.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-8 text-sm p-4 rounded-lg" style="border:1px solid rgba(212,175,55,.2);background:rgba(212,175,55,.05)">
+          <div><span class="text-xs" style="color:rgba(240,230,208,.4)">Mã SBD:</span><br><strong style="color:#f0e6d0" id="pass-sbd">—</strong></div>
+          <div><span class="text-xs" style="color:rgba(240,230,208,.4)">Ngày nhận việc:</span><br><strong style="color:#f0e6d0">15/09/2026</strong></div>
+          <div><span class="text-xs" style="color:rgba(240,230,208,.4)">Điểm tổng kết:</span><br><strong style="color:#f0e6d0" id="pass-score">—</strong></div>
+          <div><span class="text-xs" style="color:rgba(240,230,208,.4)">Xếp hạng:</span><br><strong style="color:#f0e6d0" id="pass-rank">—</strong></div>
+        </div>
+
+        <!-- Trần Tuấn Anh + Dấu xác nhận -->
+        <div class="flex items-end justify-between mb-6">
+          <div class="text-left">
+            <p class="text-xs" style="color:rgba(240,230,208,.4)">Người ký</p>
+            <p class="font-display text-base font-bold mt-1" style="color:#D4AF37">Trần Tuấn Anh</p>
+            <p class="text-[10px]" style="color:rgba(240,230,208,.35)">Giám đốc Tuyển dụng</p>
+            <div class="mt-2 w-44 h-14" style="border-bottom:1.5px solid rgba(212,175,55,.4);position:relative">
+              <svg viewBox="0 0 140 40" width="120" height="30" fill="none" style="position:absolute;bottom:0;left:0;opacity:.35"><path d="M5 32 Q20 5 35 22 Q45 8 60 20 Q70 5 85 22 Q95 8 110 18 Q120 8 135 20" stroke="#D4AF37" stroke-width="1.2" fill="none"/></svg>
+            </div>
+            <p class="text-[10px] mt-1 font-semibold" style="color:rgba(212,175,55,.6)">Chữ ký số</p>
+          </div>
+          <div class="tuananh-seal">
+            <div class="tuananh-seal-inner">
+              <i class="fas fa-star tuananh-seal-star"></i>
+              <svg viewBox="0 0 40 40" width="36" height="36" fill="none" class="mb-0.5"><path d="M20 5 L26 15 L37 17 L29 25 L31 36 L20 31 L9 36 L11 25 L3 17 L14 15 Z" fill="none" stroke="#D4AF37" stroke-width="0.8" opacity=".6"/><text x="20" y="22" text-anchor="middle" fill="#D4AF37" font-size="7" font-weight="bold" font-family="Playfair Display">A</text></svg>
+              <p class="text-[7px] font-bold tracking-[0.5px] leading-tight" style="color:#D4AF37">XÁC NHẬN</p>
+              <p class="text-[6px] tracking-[0.5px]" style="color:rgba(212,175,55,.7)">CỦA TUẤN ANH</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer: chỉ QR, không còn seal AA -->
+        <div class="flex items-center justify-end mt-4 pt-4" style="border-top:0.5px solid rgba(212,175,55,.15)">
+          <div class="text-center">
+            <img id="pass-qr" src="" alt="QR" class="w-24 h-24 rounded" style="border:1px solid rgba(212,175,55,.25)">
+            <p class="text-[9px] mt-1" style="color:rgba(240,230,208,.3)">Quét để xác thực</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center gap-4 mt-8 no-print">
+        <button onclick="exportPDF()" class="btn-gold text-sm"><i class="fas fa-file-pdf mr-2"></i>Xuất PDF</button>
+        <button onclick="showView('dashboard')" class="btn-outline text-sm"><i class="fas fa-arrow-left mr-2"></i>Quay lại</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAIL LETTER -->
+<div id="view-fail" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark flex items-center justify-center">
+    <div class="max-w-3xl w-full print-area">
+      <div class="fail-frame">
+        <div class="text-center mb-8 opacity-30"><svg viewBox="0 0 60 60" width="45" height="45" fill="none" class="mx-auto"><path d="M30 7 L42 22 L48 20 L38 30 L45 42 L30 34 L15 42 L22 30 L12 20 L18 22 Z" fill="#555"/><text x="30" y="28" text-anchor="middle" fill="#fff" font-family="Playfair Display" font-size="12" font-weight="800">A</text></svg></div>
+        <div class="text-center mb-8"><p class="text-xs tracking-[6px] opacity-40 uppercase">ANH AIRLINES</p><div class="mx-auto mt-3 mb-3" style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#999,transparent)"></div><h2 class="font-display text-xl md:text-2xl font-bold tracking-[4px] opacity-80">APPLICATION RESULT</h2></div>
+        <div class="mb-6"><p class="text-sm mb-1 opacity-60">Kính gửi:</p><p class="font-display text-lg font-bold" id="fail-name">—</p></div>
+        <div class="space-y-3 text-sm leading-relaxed mb-8 opacity-70">
+          <p>Chúng tôi chân thành cảm ơn bạn đã tham gia quy trình tuyển dụng của Anh Airlines.</p>
+          <p>Sau quá trình đánh giá kỹ lưỡng, hồ sơ của bạn chưa phù hợp với vị trí hiện tại.</p>
+          <p>Chúng tôi hy vọng sẽ tiếp tục được đồng hành cùng bạn trong các đợt tuyển dụng sắp tới.</p>
+          <p class="font-display text-right text-base mt-6">Trân trọng.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-8 text-sm p-4 border rounded-lg" style="border-color:rgba(192,192,192,.3);background:rgba(0,0,0,.03)">
+          <div><span class="text-xs opacity-50">Mã SBD:</span><br><strong id="fail-sbd">—</strong></div>
+          <div><span class="text-xs opacity-50">Điểm:</span><br><strong id="fail-score">—</strong></div>
+        </div>
+        <div class="flex items-center justify-end mt-6">
+          <div class="text-center"><img id="fail-qr" src="" alt="QR" class="w-24 h-24 rounded" style="border:1px solid rgba(192,192,192,.3)"><p class="text-[9px] mt-1 opacity-30">Quét để xác thực</p></div>
+        </div>
+      </div>
+      <div class="flex justify-center gap-4 mt-8 no-print">
+        <button onclick="exportPDF()" class="btn-gold text-sm"><i class="fas fa-file-pdf mr-2"></i>Xuất PDF</button>
+        <button onclick="showView('dashboard')" class="btn-outline text-sm"><i class="fas fa-arrow-left mr-2"></i>Quay lại</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="view-admin" class="view">
+  <div class="min-h-screen pt-24 pb-16 px-6 bg-gradient-to-b from-navy-dark via-navy to-navy-dark">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div><p class="text-gold/60 text-xs tracking-[4px] mb-1">ADMIN PORTAL</p><h2 class="font-display text-2xl font-bold">Quản lý ứng viên</h2></div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <input type="text" id="admin-search" class="input-field" placeholder="Tìm SBD, tên..." oninput="renderAdminList()" style="width:220px">
+          <button onclick="handleLogout()" class="btn-outline text-xs px-4 py-2.5"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6" id="admin-stats"></div>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button class="admin-tab active" onclick="setAdminFilter('all',this)">Tất cả</button>
+        <button class="admin-tab" onclick="setAdminFilter('review',this)"><i class="fas fa-clock mr-1"></i>Chờ duyệt</button>
+        <button class="admin-tab" onclick="setAdminFilter('progress',this)"><i class="fas fa-play mr-1"></i>Đang thi</button>
+        <button class="admin-tab" onclick="setAdminFilter('pass',this)"><i class="fas fa-check mr-1"></i>Trúng tuyển</button>
+        <button class="admin-tab" onclick="setAdminFilter('fail',this)"><i class="fas fa-times mr-1"></i>Chưa phù hợp</button>
+      </div>
+      <div class="glass overflow-hidden"><div class="overflow-x-auto">
+        <table class="w-full text-sm"><thead><tr class="border-b border-gold/10">
+          <th class="text-left p-4 text-xs text-white/40 tracking-wider font-medium">SBD</th>
+          <th class="text-left p-4 text-xs text-white/40 tracking-wider font-medium">Họ tên</th>
+          <th class="text-left p-4 text-xs text-white/40 tracking-wider font-medium hidden md:table-cell">Vòng</th>
+          <th class="text-left p-4 text-xs text-white/40 tracking-wider font-medium">Điểm</th>
+          <th class="text-left p-4 text-xs text-white/40 tracking-wider font-medium">Duyệt</th>
+          <th class="text-left p-4 text-xs text-white/40 tracking-wider font-medium">Hành động</th>
+        </tr></thead><tbody id="admin-tbody"></tbody></table>
+      </div></div>
+      <div id="admin-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(0,0,0,.7);backdrop-filter:blur(4px)"><div class="glass p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto" id="admin-modal-content"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- REASON MODAL -->
+<div id="reason-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4" style="background:rgba(0,0,0,.8);backdrop-filter:blur(6px)">
+  <div class="glass p-8 max-w-md w-full">
+    <h3 class="font-display text-lg font-bold mb-2 text-red-400">Từ chối ứng viên</h3>
+    <p class="text-white/50 text-sm mb-4" id="reason-context">—</p>
+    <textarea id="reject-reason" class="input-field mb-4" rows="3" placeholder="Nhập lý do từ chối (bắt buộc)..."></textarea>
+    <div class="flex gap-3">
+      <button onclick="confirmReject()" class="btn-danger flex-1"><i class="fas fa-ban mr-2"></i>Xác nhận từ chối</button>
+      <button onclick="closeReasonModal()" class="btn-outline flex-1">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_CREDENTIALS={username:'anhairlines1804',password:'Tuananh2009@'};
+const roundNames=['','Sàng lọc hồ sơ','Kiểm tra năng lực','Tiếng Anh hàng không','Xử lý tình huống','Phỏng vấn Video AI','Đánh giá cuối'];
+const roundTimes=[0,0,900,720,900,0,0];
+let adminFilter='all',rejectTarget={sbd:'',roundNum:0},currentUser=null,quizState={questions:[],answers:[],current:0,round:0,timer:null,timeLeft:0},adminLoggedIn=false;
+
+const questionBank={
+  round2:[
+    {q:"Một chuyến bay khởi hành lúc 08:30 và bay trong 4 giờ 45 phút. Máy bay hạ cánh lúc mấy giờ?",o:["12:45","13:15","13:00","12:30"],a:1},
+    {q:"Trong dãy số: 2, 6, 18, 54, ... Số tiếp theo?",o:["108","162","148","180"],a:1},
+    {q:"Máy bay có 240 ghế. 85% ghế đã được đặt. Còn bao nhiêu ghế trống?",o:["36","30","40","34"],a:0},
+    {q:"Nếu A=1, B=2, C=3... tổng giá trị 'FLY' là:",o:["43","40","42","38"],a:0},
+    {q:"Máy bay bay 900km/h trong 2.5 giờ. Khoảng cách:",o:["2100km","2250km","2000km","2350km"],a:1},
+    {q:"Tất cả tiếp viên là nữ, một số là phi công. Kết luận đúng?",o:["Tất cả phi công là nữ","Một số nữ là phi công","Tất cả nữ là tiếp viên","Không thể kết luận"],a:1},
+    {q:"Sân bay Nội Bài mã IATA?",o:["HAN","SGN","DAD","CXR"],a:0},
+    {q:"1 USD = 25.000 VND. Vé 400 USD bằng bao nhiêu VND?",o:["10.000.000","8.000.000","12.000.000","9.000.000"],a:0},
+    {q:"Hình hộp 6 mặt vuông cạnh 5cm. Diện tích toàn phần:",o:["150cm²","125cm²","300cm²","75cm²"],a:0},
+    {q:"'SAFE' mã hóa '+1' mỗi chữ. 'RISK' mã hóa thành:",o:["SJTL","SJTLM","SITL","QHRJ"],a:0},
+    {q:"Chuyến bay chở 180 hành khách, 12 phi hành đoàn. Tổng:",o:["192","188","190","194"],a:0},
+    {q:"Tỷ lệ 1:50. Với 200 hành khách cần bao nhiêu tiếp viên?",o:["4","3","5","6"],a:0},
+  ],
+  round3:[
+    {q:"What does 'ETA' stand for in aviation?",o:["Estimated Time of Arrival","Exact Time of Arrival","Expected Time Available","Emergency Time Action"],a:0},
+    {q:"'Fasten your seatbelt' is a/an _____ instruction.",o:["safety","emergency","comfort","optional"],a:0},
+    {q:"Choose the correct sentence:",o:["The aircraft has landed safely","The aircraft have landed safely","The aircraft has land safe","The aircraft are landed safely"],a:0},
+    {q:"What does 'turbulence' mean?",o:["Sự cố động cơ","Sự rung lắc không khí","Thời tiết xấu","Độ cao thấp"],a:1},
+    {q:"'Would you mind _____ your seat?' - 'Not at all.'",o:["trading","to trade","trade","traded"],a:0},
+    {q:"In aviation, 'gate' refers to:",o:["Cửa ra máy bay","Cửa thoát hiểm","Lối vào sân bay","Cửa hàng không"],a:0},
+    {q:"Which is NOT related to aviation emergency?",o:["Evacuation","Oxygen mask","Duty-free","Life vest"],a:2},
+    {q:"'Cabin crew will demonstrate safety procedures shortly.' Means:",o:["Tiếp viên sẽ sớm hướng dẫn an toàn","Tiếp viên vừa hướng dẫn xong","Hành khách phải tự biết","An toàn không quan trọng"],a:0},
+    {q:"Pronunciation of 'aisle'?",o:["/aɪl/","/ɪs/","/eɪsəl/","/aɪsəl/"],a:0},
+    {q:"'This flight has been delayed' means:",o:["Chuyến bay bị hoãn","Chuyến bay bị hủy","Chuyến bay đã đến","Chuyến bay đúng giờ"],a:0},
+    {q:"'In a water landing, seat cushion can be used as a _____.'",o:["floatation device","pillow","weapon","shield"],a:0},
+    {q:"Most polite way to ask passenger to move?",o:["Would you mind relocating?","Move now","Go sit there","You must change"],a:0},
+  ],
+  round4:[
+    {q:"Hành khách phàn nàn đồ ăn không ngon. Bạn nên:",o:["Nói tôi không nấu","Xin lỗi và đề xuất lựa chọn khác","Bỏ qua","Nói đồ ăn luôn vậy"],a:1},
+    {q:"Hành khách bị cảm cúm nặng. Đầu tiên:",o:["Yêu cầu đeo khẩu trang và báo cơ trưởng","Nói không nên bay","Bỏ qua","Đưa thuốc tự ý"],a:0},
+    {q:"Hai hành khách tranh chấp chỗ. Hành động tốt nhất:",o:["Yêu cầu một người nhường","Kiểm tra boarding và giải quyết theo quy định","Bỏ qua","Gọi cảnh sát"],a:1},
+    {q:"Hạ cánh khẩn cấp, ưu tiên ĐÚNG:",o:["Giúp trẻ em trước","Tự thoát rồi giúp người khác","Chờ tất cả ra rồi thoát","Chỉ quan tâm mình"],a:1},
+    {q:"Hành khách yêu cầu thêm rượu nhưng đã uống nhiều:",o:["Phục vụ vì khách là trọng tâm","Từ chối khéo và đề xuất đồ uống khác","Báo cảnh sát","Phục vụ thêm"],a:1},
+    {q:"Phát hiện hành khách gây rối:",o:["Lớn tiếng xử lý trực tiếp","Báo cáo cơ trưởng và theo dõi từ xa","Bỏ qua","Yêu cầu người khác khống chế"],a:1},
+    {q:"Hành khách hỏi thông tin cá nhân người khác:",o:["Cung cấp vì có quyền","Từ chối lịch sự vì bảo mật","Tùy tâm trạng","Hỏi người đó"],a:1},
+    {q:"Trẻ em đi một mình:",o:["Để tự lập","Theo dõi đặc biệt, hỗ trợ xuyên suốt","Giao cho hành khách khác","Chỉ quan tâm khi khóc"],a:1},
+    {q:"Hành khách thất lạc hành lý:",o:["Không phải trách nhiệm","Hướng dẫn quy trình khai báo và hỗ trợ","Bỏ qua","Đền bù ngay"],a:1},
+    {q:"Có bác sĩ cần cấp cứu:",o:["Phát loa tìm bác sĩ và chuẩn bị y tế khẩn cấp","Nói không có thiết bị","Chờ hạ cánh","Tự xử lý"],a:0},
+    {q:"Hành khách xin đổi ghế nhưng chuyến bay đầy:",o:["Đuổi người khác","Giải thích và đề xuất giải pháp thay thế","Nói không được","Tùy tiện đổi"],a:1},
+    {q:"Đồng nghiệp không tuân thủ an toàn:",o:["Bỏ qua","Nhắc nhở và báo cáo nếu cần","Làm theo","Đăng mạng xã hội"],a:1},
+  ]
+};
+
+function getCandidates(){return JSON.parse(localStorage.getItem('anh_candidates')||'[]');}
+function saveCandidates(c){localStorage.setItem('anh_candidates',JSON.stringify(c));}
+function generateSBD(){let n=parseInt(localStorage.getItem('anh_counter')||'134');n++;localStorage.setItem('anh_counter',n.toString());return`AA2026-${String(n).padStart(6,'0')}`;}
+function createRounds(){return[...Array(6)].map((_,i)=>({id:i+1,status:i===0?'current':'pending',score:null,reviewStatus:'none',reviewNote:'',reviewedAt:null}));}
+function getAwaitingRound(c){return c.rounds.find(r=>r.reviewStatus==='awaiting');}
+
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const el=document.getElementById(`view-${id}`);if(el){el.classList.add('active');window.scrollTo(0,0);}if(id==='dashboard')renderDashboard();if(id==='admin')renderAdmin();}
+function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('hidden');}
+window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>50);});
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.className=`toast toast-${type} show`;t.innerHTML=`<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'} mr-2"></i>${msg}`;setTimeout(()=>t.classList.remove('show'),4000);}
+function togglePw(id,el){const inp=document.getElementById(id),icon=el.querySelector('i');if(inp.type==='password'){inp.type='text';icon.className='fas fa-eye-slash';}else{inp.type='password';icon.className='fas fa-eye';}}
+function playChime(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[880,1108.73].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.2,ctx.currentTime+i*.25);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+i*.25+.7);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.25);o.stop(ctx.currentTime+i*.25+.7);});}catch(e){}}
+
+function handleRegister(e){e.preventDefault();const d={name:document.getElementById('reg-name').value.trim(),email:document.getElementById('reg-email').value.trim(),phone:document.getElementById('reg-phone').value.trim(),dob:document.getElementById('reg-dob').value,gender:document.getElementById('reg-gender').value,height:document.getElementById('reg-height').value,weight:document.getElementById('reg-weight').value,education:document.getElementById('reg-education').value,experience:document.getElementById('reg-experience').value,password:document.getElementById('reg-password').value};const cs=getCandidates();if(cs.find(c=>c.email===d.email)){showToast('Email đã đăng ký!','error');return;}const sbd=generateSBD();cs.push({sbd,...d,rounds:createRounds(),totalScore:0,rank:null,result:null,rejectReason:null,registeredAt:Date.now()});saveCandidates(cs);showToast(`Đăng ký thành công! SBD: ${sbd}`,'success');document.getElementById('register-form').reset();setTimeout(()=>showView('login'),1500);}
+function handleLogin(e){e.preventDefault();const id=document.getElementById('login-id').value.trim().toLowerCase(),pass=document.getElementById('login-password').value;const u=getCandidates().find(c=>(c.sbd.toLowerCase()===id||c.email.toLowerCase()===id)&&c.password===pass);if(!u){showToast('SBD/Email hoặc mật khẩu không đúng','error');return;}currentUser=u;playChime();showToast(`Chào mừng ${u.name}!`,'success');showView('dashboard');}
+function handleAdminLogin(e){e.preventDefault();const u=document.getElementById('admin-user').value.trim(),p=document.getElementById('admin-pass').value;if(u===ADMIN_CREDENTIALS.username&&p===ADMIN_CREDENTIALS.password){adminLoggedIn=true;playChime();showToast('Đăng nhập quản trị thành công','success');const logs=JSON.parse(localStorage.getItem('anh_admin_logs')||'[]');logs.push({time:new Date().toISOString(),action:'LOGIN_SUCCESS'});localStorage.setItem('anh_admin_logs',JSON.stringify(logs.slice(-50)));showView('admin');}else{showToast('Tài khoản hoặc mật khẩu không đúng','error');}}
+function handleLogout(){currentUser=null;adminLoggedIn=false;if(quizState.timer)clearInterval(quizState.timer);showToast('Đã đăng xuất','info');showView('home');}
+
+function renderDashboard(){
+  if(!currentUser)return;const u=getCandidates().find(c=>c.sbd===currentUser.sbd);if(u)currentUser=u;
+  document.getElementById('dash-name').textContent=currentUser.name;document.getElementById('dash-sbd').textContent=`SBD: ${currentUser.sbd}`;
+  let total=0,count=0;currentUser.rounds.forEach(r=>{if(r.score!==null){total+=r.score;count++;}});currentUser.totalScore=count>0?Math.round(total/count):0;
+  const all=getCandidates().filter(c=>c.result===null),sorted=[...all].sort((a,b)=>(b.totalScore||0)-(a.totalScore||0)),idx=sorted.findIndex(c=>c.sbd===currentUser.sbd);
+  currentUser.rank=(idx>=0&&currentUser.totalScore>0)?`TOP ${Math.round((1-idx/sorted.length)*100)}%`:'—';
+  document.getElementById('dash-score').textContent=`${currentUser.totalScore}/100`;document.getElementById('dash-rank').textContent=currentUser.rank;
+  const stepsEl=document.getElementById('dash-steps');stepsEl.innerHTML='';let nextAction=null;
+  currentUser.rounds.forEach((r,i)=>{
+    let cls='pending',icon=(i+1),scoreText='',statusText='Chờ xử lý';
+    if(r.status==='completed'){
+      if(r.reviewStatus==='approved'){cls='completed-approved';icon='<i class="fas fa-check text-xs"></i>';statusText='Hoàn thành — Đã duyệt';}
+      else if(r.reviewStatus==='rejected'){cls='completed-rejected';icon='<i class="fas fa-times text-xs"></i>';statusText='Không đạt';}
+      else{cls='completed-awaiting';icon='<i class="fas fa-hourglass-half text-xs"></i>';statusText='<span style="color:#fbbf24">Chờ Admin duyệt</span>';nextAction='waiting';}
+      scoreText=r.score!==null?`<span class="text-gold text-xs ml-auto">${r.score}/100</span>`:'';
+    }else if(r.status==='current'){cls='current';statusText='Sẵn sàng bắt đầu';if(!nextAction)nextAction=i+1;}
+    else{if(!nextAction)nextAction=i+1;}
+    stepsEl.innerHTML+=`<div class="step-item ${cls}"><div class="step-circle ${cls}">${icon}</div><div class="flex-1"><div class="flex items-center"><span class="font-medium text-sm">Vòng ${i+1}: ${roundNames[i+1]}</span>${scoreText}</div><p class="text-xs text-white/40 mt-0.5">${statusText}</p></div></div>`;
+  });
+  const a=document.getElementById('dash-action');
+  if(currentUser.result==='pass')a.innerHTML=`<div class="text-center py-6"><div class="w-16 h-16 rounded-full bg-gold/10 border-2 border-gold flex items-center justify-center mx-auto mb-4"><i class="fas fa-trophy text-gold text-2xl"></i></div><h3 class="font-display text-xl font-bold text-gold mb-2">Chúc mừng!</h3><p class="text-white/50 text-sm mb-6">Bạn đã trúng tuyển vị trí Cabin Crew</p><button onclick="showPassLetter()" class="btn-gold text-sm"><i class="fas fa-envelope-open mr-2"></i>Xem thư mời nhận việc</button></div>`;
+  else if(currentUser.result==='fail')a.innerHTML=`<div class="text-center py-6"><div class="w-16 h-16 rounded-full bg-white/5 border-2 border-white/20 flex items-center justify-center mx-auto mb-4"><i class="fas fa-envelope text-white/40 text-2xl"></i></div><h3 class="font-display text-xl font-bold text-white/70 mb-2">Kết quả tuyển dụng</h3><p class="text-white/40 text-sm mb-4">Xem kết quả chi tiết</p>${currentUser.rejectReason?`<p class="text-white/30 text-xs mb-4 italic">Lý do: ${currentUser.rejectReason}</p>`:''}<button onclick="showFailLetter()" class="btn-outline text-sm"><i class="fas fa-envelope-open mr-2"></i>Xem kết quả</button></div>`;
+  else if(nextAction==='waiting')a.innerHTML=`<div class="text-center py-6"><div class="w-16 h-16 rounded-full bg-yellow-500/10 border-2 border-yellow-500/30 flex items-center justify-center mx-auto mb-4"><i class="fas fa-hourglass-half text-yellow-400 text-2xl"></i></div><h3 class="font-display text-xl font-bold text-yellow-400 mb-2">Đang chờ duyệt</h3><p class="text-white/50 text-sm">Kết quả vòng vừa rồi đang được Ban tuyển dụng xem xét.</p></div>`;
+  else if(nextAction)a.innerHTML=`<div class="text-center py-6"><p class="text-white/50 text-sm mb-4">Sẵn sàng cho Vòng ${nextAction}?</p><button onclick="startRound(${nextAction})" class="btn-gold text-sm">${nextAction===5?'<i class="fas fa-video mr-2"></i>':'<i class="fas fa-play mr-2"></i>'}Bắt đầu Vòng ${nextAction}: ${roundNames[nextAction]}</button></div>`;
+  else a.innerHTML=`<p class="text-center text-white/40 text-sm py-6">Đang xử lý...</p>`;
+}
+
+function startRound(n){
+  if(!currentUser)return;
+  if(n===1){showToast('Đang sàng lọc hồ sơ...','info');setTimeout(()=>completeRound(1,Math.floor(Math.random()*15)+80),2500);return;}
+  if(n===5){showView('interview');simulateInterview();return;}
+  if(n===6){showToast('Đang tổng hợp đánh giá...','info');setTimeout(()=>{completeRound(6,Math.floor(Math.random()*20)+70);},3000);return;}
+  const bank=questionBank[`round${n}`];if(!bank)return;
+  const qs=[...bank].sort(()=>Math.random()-.5).slice(0,8).map(q=>{const idx=[0,1,2,3].sort(()=>Math.random()-.5);return{q:q.q,o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a)};});
+  quizState={questions:qs,answers:new Array(8).fill(-1),current:0,round:n,timer:null,timeLeft:roundTimes[n]};
+  document.getElementById('quiz-round-label').textContent=`VÒNG ${n}`;document.getElementById('quiz-round-name').textContent=roundNames[n];document.getElementById('quiz-total').textContent=qs.length;
+  showView('quiz');renderQuestion();startTimer();
+}
+function renderQuestion(){const{questions:qs,answers:ans,current:cur}=quizState;const q=qs[cur],L=['A','B','C','D'];document.getElementById('quiz-current').textContent=cur+1;document.getElementById('quiz-question-area').innerHTML=`<p class="text-white/50 text-xs tracking-wider mb-3">CÂU HỎI ${cur+1}</p><p class="font-medium text-base md:text-lg mb-6 leading-relaxed">${q.q}</p><div class="space-y-3">${q.o.map((opt,i)=>`<div class="quiz-option ${ans[cur]===i?'selected':''}" onclick="selectAnswer(${i})"><div class="option-letter">${L[i]}</div><span class="text-sm">${opt}</span></div>`).join('')}</div>`;document.getElementById('btn-prev').style.visibility=cur===0?'hidden':'visible';document.getElementById('btn-next').innerHTML=cur===qs.length-1?'Nộp bài<i class="fas fa-check ml-2"></i>':'Tiếp theo<i class="fas fa-arrow-right ml-2"></i>';}
+function selectAnswer(i){quizState.answers[quizState.current]=i;renderQuestion();}
+function prevQuestion(){if(quizState.current>0){quizState.current--;renderQuestion();}}
+function nextQuestion(){if(quizState.current<quizState.questions.length-1){quizState.current++;renderQuestion();}else submitQuiz();}
+function submitQuiz(){if(quizState.timer)clearInterval(quizState.timer);let c=0;quizState.questions.forEach((q,i)=>{if(quizState.answers[i]===q.a)c++;});completeRound(quizState.round,Math.round(c/quizState.questions.length*100));}
+function startTimer(){quizState.timeLeft=roundTimes[quizState.round];updateTimerDisplay();quizState.timer=setInterval(()=>{quizState.timeLeft--;updateTimerDisplay();if(quizState.timeLeft<=0){clearInterval(quizState.timer);showToast('Hết thời gian!','error');submitQuiz();}},1000);}
+function updateTimerDisplay(){const m=Math.floor(quizState.timeLeft/60),s=quizState.timeLeft%60;document.getElementById('quiz-timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const pct=quizState.timeLeft/roundTimes[quizState.round],circ=194.78;const c=document.getElementById('timer-circle'),t=document.getElementById('quiz-timer');c.style.strokeDashoffset=circ*(1-pct);if(pct<.15){c.style.stroke='#ef4444';t.style.color='#ef4444';}else if(pct<.3){c.style.stroke='#f59e0b';t.style.color='#f59e0b';}else{c.style.stroke='#D4AF37';t.style.color='#D4AF37';}}
+
+function completeRound(rn,score){
+  const cs=getCandidates(),idx=cs.findIndex(c=>c.sbd===currentUser.sbd);if(idx<0)return;
+  cs[idx].rounds[rn-1].status='completed';cs[idx].rounds[rn-1].score=score;
+  if(rn<6){cs[idx].rounds[rn-1].reviewStatus='awaiting';}
+  if(rn===6){cs[idx].rounds[rn-1].reviewStatus='approved';cs[idx].rounds[rn-1].reviewedAt=new Date().toISOString();let t=0,cnt=0;cs[idx].rounds.forEach(r=>{if(r.score!==null){t+=r.score;cnt++;}});cs[idx].totalScore=cnt>0?Math.round(t/cnt):0;cs[idx].result=cs[idx].totalScore>=70?'pass':'fail';}
+  saveCandidates(cs);currentUser=cs[idx];
+  if(rn<6)showToast(`Vòng ${rn}: ${score}/100 — Đã gửi chờ Admin duyệt`,'info');
+  else showToast(`Hoàn thành! Điểm: ${currentUser.totalScore}/100`,'success');
+  showView('dashboard');
+}
+
+function simulateInterview(){const st=[{p:15,t:'Đang kết nối AI...',i:'fa-wifi',d:'Khởi tạo kết nối'},{p:30,t:'Đang kích hoạt camera...',i:'fa-video',d:'Kiểm tra thiết bị'},{p:50,t:'AI phân tích biểu cảm...',i:'fa-brain',d:'Xử lý hình ảnh'},{p:70,t:'Đang đánh giá ngữ điệu...',i:'fa-microphone',d:'Phân tích âm thanh'},{p:85,t:'Đang tổng hợp...',i:'fa-chart-line',d:'Xử lý dữ liệu'},{p:100,t:'Hoàn thành!',i:'fa-check-circle',d:'Lưu kết quả'}];let i=0;const iv=setInterval(()=>{if(i>=st.length){clearInterval(iv);setTimeout(()=>completeRound(5,Math.floor(Math.random()*20)+75),1000);return;}const s=st[i];document.getElementById('interview-status').textContent=s.t;document.getElementById('interview-detail').textContent=s.d;document.getElementById('interview-progress').style.width=s.p+'%';document.getElementById('interview-icon').className=`fas ${s.i} text-gold text-2xl`;i++;},1800);}
+
+function showPassLetter(){document.getElementById('pass-name').textContent=currentUser.name;document.getElementById('pass-sbd').textContent=currentUser.sbd;document.getElementById('pass-score').textContent=`${currentUser.totalScore}/100`;document.getElementById('pass-rank').textContent=currentUser.rank||'TOP 10%';document.getElementById('pass-qr').src=`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=ANH_AIRLINES_OFFER_${currentUser.sbd}_${Date.now()}&color=D4AF37&bgcolor=081C3A`;showView('pass');}
+function showFailLetter(){document.getElementById('fail-name').textContent=currentUser.name;document.getElementById('fail-sbd').textContent=currentUser.sbd;document.getElementById('fail-score').textContent=`${currentUser.totalScore}/100`;document.getElementById('fail-qr').src=`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=ANH_AIRLINES_RESULT_${currentUser.sbd}_${Date.now()}&color=333333`;showView('fail');}
+function exportPDF(){window.print();}
+
+function setAdminFilter(f,el){adminFilter=f;document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderAdminList();}
+function renderAdmin(){if(!adminLoggedIn)return;const cs=getCandidates();const total=cs.length,awaiting=cs.filter(c=>!!getAwaitingRound(c)).length,inProg=cs.filter(c=>c.result===null&&!getAwaitingRound(c)).length,passed=cs.filter(c=>c.result==='pass').length,failed=cs.filter(c=>c.result==='fail').length;
+document.getElementById('admin-stats').innerHTML=`<div class="glass-card p-4 text-center"><p class="font-display text-2xl font-bold text-gold">${total}</p><p class="text-white/40 text-[10px] mt-1">Tổng</p></div><div class="glass-card p-4 text-center"><p class="font-display text-2xl font-bold text-yellow-400">${awaiting}</p><p class="text-white/40 text-[10px] mt-1">Chờ duyệt</p></div><div class="glass-card p-4 text-center"><p class="font-display text-2xl font-bold text-blue-400">${inProg}</p><p class="text-white/40 text-[10px] mt-1">Đang thi</p></div><div class="glass-card p-4 text-center"><p class="font-display text-2xl font-bold text-green-400">${passed}</p><p class="text-white/40 text-[10px] mt-1">Trúng tuyển</p></div><div class="glass-card p-4 text-center"><p class="font-display text-2xl font-bold text-red-400">${failed}</p><p class="text-white/40 text-[10px] mt-1">Chưa phù hợp</p></div>`;renderAdminList();}
+
+function renderAdminList(){if(!adminLoggedIn)return;const search=(document.getElementById('admin-search')?.value||'').toLowerCase();let cs=getCandidates();if(adminFilter==='review')cs=cs.filter(c=>!!getAwaitingRound(c));else if(adminFilter==='progress')cs=cs.filter(c=>c.result===null&&!getAwaitingRound(c));else if(adminFilter==='pass')cs=cs.filter(c=>c.result==='pass');else if(adminFilter==='fail')cs=cs.filter(c=>c.result==='fail');if(search)cs=cs.filter(c=>c.sbd.toLowerCase().includes(search)||c.name.toLowerCase().includes(search));const tb=document.getElementById('admin-tbody');if(!cs.length){tb.innerHTML='<tr><td colspan="6" class="p-8 text-center text-white/30">Không tìm thấy</td></tr>';return;}
+tb.innerHTML=cs.map(c=>{const aw=getAwaitingRound(c);const cur=c.rounds.find(r=>r.status==='current');let badge='';if(aw)badge=`<span class="review-badge review-awaiting"><i class="fas fa-clock text-[9px]"></i>V${aw.id}</span>`;else if(c.result==='pass')badge=`<span class="review-badge review-approved"><i class="fas fa-check text-[9px]"></i>Pass</span>`;else if(c.result==='fail')badge=`<span class="review-badge review-rejected"><i class="fas fa-times text-[9px]"></i>Fail</span>`;return`<tr class="border-b border-white/5 hover:bg-white/[.02] transition-colors"><td class="p-4 font-mono text-gold text-xs">${c.sbd}</td><td class="p-4 text-sm">${c.name}</td><td class="p-4 text-white/50 text-xs hidden md:table-cell">${cur?`Vòng ${cur.id}`:'—'}</td><td class="p-4 font-bold text-sm">${c.totalScore||'—'}</td><td class="p-4">${badge}</td><td class="p-4"><button onclick='showDetail("${c.sbd}")' class="text-gold/70 hover:text-gold text-xs cursor-pointer mr-3"><i class="fas fa-eye mr-1"></i>Chi tiết</button>${aw?`<button onclick='quickApprove("${c.sbd}",${aw.id})' class="text-green-400/70 hover:text-green-400 text-xs cursor-pointer"><i class="fas fa-check-double mr-1"></i>Duyệt</button>`:''}</td></tr>`;}).join('');}
+
+function quickApprove(sbd,rn){approveRound(sbd,rn);}
+function approveRound(sbd,rn){const cs=getCandidates(),idx=cs.findIndex(c=>c.sbd===sbd);if(idx<0)return;const r=cs[idx].rounds[rn-1];if(r.reviewStatus!=='awaiting'){showToast('Vòng này không chờ duyệt','error');return;}r.reviewStatus='approved';r.reviewedAt=new Date().toISOString();r.reviewNote='Được duyệt bởi Trần Tuấn Anh';if(rn<6)cs[idx].rounds[rn].status='current';const logs=JSON.parse(localStorage.getItem('anh_admin_logs')||'[]');logs.push({time:new Date().toISOString(),action:'APPROVE',sbd,round:rn});localStorage.setItem('anh_admin_logs',JSON.stringify(logs.slice(-100)));saveCandidates(cs);showToast(`Đã duyệt Vòng ${rn} cho ${cs[idx].name}`,'success');closeAdminModal();renderAdmin();}
+function openRejectModal(sbd,rn){rejectTarget={sbd,rn};const c=getCandidates().find(x=>x.sbd===sbd);document.getElementById('reject-reason').value='';document.getElementById('reason-context').textContent=`Từ chối Vòng ${rn}: ${roundNames[rn]} — ${c?c.name:sbd}`;const m=document.getElementById('reason-modal');m.classList.remove('hidden');m.classList.add('flex');}
+function closeReasonModal(){const m=document.getElementById('reason-modal');m.classList.add('hidden');m.classList.remove('flex');}
+function confirmReject(){const reason=document.getElementById('reject-reason').value.trim();if(!reason){showToast('Vui lòng nhập lý do từ chối','error');return;}const cs=getCandidates(),idx=cs.findIndex(c=>c.sbd===rejectTarget.sbd);if(idx<0)return;const r=cs[idx].rounds[rejectTarget.roundNum-1];if(r.reviewStatus!=='awaiting'){showToast('Không ở trạng thái chờ duyệt','error');closeReasonModal();return;}r.reviewStatus='rejected';r.reviewedAt=new Date().toISOString();r.reviewNote=reason;cs[idx].result='fail';cs[idx].rejectReason=`Vòng ${rejectTarget.roundNum}: ${reason}`;let t=0,cnt=0;cs[idx].rounds.forEach(rr=>{if(rr.score!==null){t+=rr.score;cnt++;}});cs[idx].totalScore=cnt>0?Math.round(t/cnt):0;const logs=JSON.parse(localStorage.getItem('anh_admin_logs')||'[]');logs.push({time:new Date().toISOString(),action:'REJECT',sbd:rejectTarget.sbd,round:rejectTarget.roundNum,reason});localStorage.setItem('anh_admin_logs',JSON.stringify(logs.slice(-100)));saveCandidates(cs);showToast(`Đã từ chối ${cs[idx].name}`,'error');closeReasonModal();closeAdminModal();renderAdmin();}
+
+function showDetail(sbd){const c=getCandidates().find(x=>x.sbd===sbd);if(!c)return;const m=document.getElementById('admin-modal'),ct=document.getElementById('admin-modal-content');
+ct.innerHTML=`<div class="flex items-center justify-between mb-6"><div><h3 class="font-display text-xl font-bold">${c.name}</h3><span class="font-mono text-gold text-xs">${c.sbd}</span></div><button onclick="closeAdminModal()" class="text-white/40 hover:text-white text-xl cursor-pointer"><i class="fas fa-times"></i></button></div>
+<div class="grid grid-cols-2 gap-3 mb-6 text-sm"><div><span class="text-white/40 text-[10px] tracking-wider">EMAIL</span><br>${c.email}</div><div><span class="text-white/40 text-[10px] tracking-wider">SĐT</span><br>${c.phone}</div><div><span class="text-white/40 text-[10px] tracking-wider">NGÀY SINH</span><br>${c.dob}</div><div><span class="text-white/40 text-[10px] tracking-wider">GIỚI TÍNH</span><br>${c.gender}</div><div><span class="text-white/40 text-[10px] tracking-wider">CHIỀU CAO / CÂN NẶNG</span><br>${c.height}cm / ${c.weight}kg</div><div><span class="text-white/40 text-[10px] tracking-wider">HỌC VẤN</span><br>${c.education}</div></div>
+<h4 class="font-display font-bold text-gold/80 mb-3 text-sm tracking-wider">TIẾN ĐỘ</h4>
+<div class="space-y-2 mb-6">${c.rounds.map((r,i)=>{let si='';if(r.status==='completed'&&r.reviewStatus==='approved')si='<span class="text-green-400 text-xs"><i class="fas fa-check-circle"></i> Đã duyệt</span>';else if(r.status==='completed'&&r.reviewStatus==='rejected')si='<span class="text-red-400 text-xs"><i class="fas fa-times-circle"></i> Đã từ chối</span>';else if(r.status==='completed'&&r.reviewStatus==='awaiting')si='<span class="text-yellow-400 text-xs"><i class="fas fa-hourglass-half"></i> Chờ duyệt</span>';else if(r.status==='current')si='<span class="text-gold text-xs"><i class="fas fa-spinner fa-spin"></i> Đang thực hiện</span>';else si='<span class="text-white/20 text-xs"><i class="fas fa-clock"></i> Chờ</span>';
+let btns='';if(r.reviewStatus==='awaiting')btns=`<div class="flex gap-2 mt-2"><button onclick="approveRound('${c.sbd}',${r.id})" class="btn-success-sm"><i class="fas fa-check mr-1"></i>Duyệt Vòng ${r.id}</button><button onclick="openRejectModal('${c.sbd}',${r.id})" class="btn-danger"><i class="fas fa-ban mr-1"></i>Từ chối</button></div>`;
+let note='';if(r.reviewNote)note=`<p class="text-[10px] text-white/30 mt-1 italic">${r.reviewNote}</p>`;
+return`<div class="py-3 px-4 rounded-lg ${r.status==='completed'?'bg-gold/5':'bg-white/[.02]'} border border-white/5"><div class="flex items-center justify-between"><div><span class="text-sm font-medium">Vòng ${i+1}: ${roundNames[i+1]}</span>${r.score!==null?`<span class="text-gold font-bold text-xs ml-3">${r.score}/100</span>`:''}</div>${si}</div>${note}${btns}</div>`;}).join('')}</div>
+<div class="flex items-center justify-between p-4 rounded-lg bg-white/[.03] mb-4"><div><span class="text-white/40 text-xs">Điểm tổng</span><br><span class="font-display text-2xl font-bold text-gold">${c.totalScore||0}/100</span></div><div class="text-right"><span class="text-white/40 text-xs">Kết quả</span><br>${c.result==='pass'?'<span class="text-green-400 font-bold">Trúng tuyển</span>':c.result==='fail'?'<span class="text-red-400 font-bold">Chưa phù hợp</span>':'<span class="text-white/40">Đang xử lý</span>'}</div></div>
+ ${c.rejectReason?`<div class="p-3 rounded-lg bg-red-500/5 border border-red-500/10 mb-4"><p class="text-[10px] text-white/30 mb-1">LÝ DO TỪ CHỐI:</p><p class="text-red-400/80 text-xs">${c.rejectReason}</p></div>`:''}
+ ${c.result?`<button onclick="closeAdminModal();previewLetter('${c.sbd}','${c.result}')" class="btn-gold text-xs w-full"><i class="fas fa-envelope-open mr-2"></i>${c.result==='pass'?'Xem thư mời':'Xem kết quả'}</button>`:''}`;
+m.classList.remove('hidden');m.classList.add('flex');}
+function closeAdminModal(){const m=document.getElementById('admin-modal');m.classList.add('hidden');m.classList.remove('flex');}
+function previewLetter(sbd,res){const c=getCandidates().find(x=>x.sbd===sbd);if(!c)return;currentUser=c;if(res==='pass')showPassLetter();else showFailLetter();}
+document.getElementById('admin-modal').addEventListener('click',function(e){if(e.target===this)closeAdminModal();});
+document.getElementById('reason-modal').addEventListener('click',function(e){if(e.target===this)closeReasonModal();});
+
+function initParticles(){const cv=document.getElementById('particle-canvas');if(!cv)return;const ctx=cv.getContext('2d');let ps=[];const n=50;function rs(){cv.width=cv.parentElement.offsetWidth;cv.height=cv.parentElement.offsetHeight;}rs();window.addEventListener('resize',rs);for(let i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.5+.5,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,a:Math.random()*.5+.1});function d(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,175,55,${p.a})`;ctx.fill();});for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle=`rgba(212,175,55,${.06*(1-dist/120)})`;ctx.lineWidth=.5;ctx.stroke();}}requestAnimationFrame(d);}d();}
+
+window.addEventListener('load',()=>{initParticles();setTimeout(()=>{document.getElementById('loading-screen').classList.add('hide');setTimeout(()=>document.getElementById('loading-screen').style.display='none',800);},2800);});
+document.addEventListener('keydown',(e)=>{if(!document.getElementById('view-quiz').classList.contains('active'))return;if(e.key==='1'||e.key==='a'||e.key==='A')selectAnswer(0);if(e.key==='2'||e.key==='b'||e.key==='B')selectAnswer(1);if(e.key==='3'||e.key==='c'||e.key==='C')selectAnswer(2);if(e.key==='4'||e.key==='d'||e.key==='D')selectAnswer(3);if(e.key==='ArrowRight')nextQuestion();if(e.key==='ArrowLeft')prevQuestion();});
+</script>
+</body>
+</html>
